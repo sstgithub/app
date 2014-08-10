@@ -1,2 +1,74 @@
-<h1>Static#index</h1>
-<p>Find me in app/views/static/index.html.erb</p>
+<script type='text/x-handlebars'>
+  <div class='navbar'>
+    <div class='navbar-inner'>
+      <a class='brand' href='#'>Inventorier</a>
+      <ul class='nav'>
+        <li>{{#linkTo 'items'}}Items{{/linkTo}}</li>
+        <li>{{#linkTo 'about'}}About{{/linkTo}}</li>
+      </ul>
+    </div>
+  </div>
+  {{outlet}}
+</script>
+
+<script type='text/x-handlebars' id='about'>
+	<div class='about'>
+		<p>Created by Sid Tantia</p>
+	</div>
+</script>
+
+<script type='text/x-handlebars' id='items'>
+	<div class='container-fluid'>
+		<div class='row-fluid'>
+			<div clsas='span3'>
+				<table class='table'>
+					<thead>
+					<tr>
+						<th>Current Items</th>
+					</tr>
+					</thead>
+					{{#each model}}
+					<tr>
+						<td>
+							{{#linkTo 'item' this}}{{metalName}}
+							<small class='muted'>by {{employeeName}}</small>
+							{{/linkTo}}
+						</td>
+					</tr>
+					{{/each}}
+				</table>
+			</div>
+			<div class='span9'>
+				{{outlet}}
+			</div>
+		</div>
+	</div>
+</script>
+
+<script type="text/x-handlebars" id="items/index">
+  <p class="text-warning">Please select an item</p>
+</script>
+
+<script type="text/x-handlebars" id="item">
+  {{#if isEditing}}
+  {{partial 'item/edit'}}
+  <button {{action 'doneEditing'}}>Done</button>
+  {{else}}
+  <button {{action 'edit'}}>Edit</button>
+  {{/if}}
+  <h1>{{metalName}}</h1>
+  <h2>by {{employeeName}} <small class="muted">({{date updatedAt}})</small></h2>
+  <hr>
+  // <div class="intro">
+  //   {{markdown intro}}
+  // </div>
+  // <div class="below-the-fold">
+  //   {{markdown extended}}
+  // </div>
+</script>
+
+<script type="text/x-handlebars" id="item/_edit">
+  <p>{{view Ember.TextField valueBinding='title' cols="30"}}</p>
+  <p>{{view Ember.TextArea valueBinding='intro' cols="50"}}</p>
+  <p>{{view Ember.TextArea valueBinding='extended' cols="80" rows="10"}}</p>
+</script>
